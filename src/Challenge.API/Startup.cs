@@ -35,12 +35,10 @@ namespace Challenge.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Challenge.API v1"));
-                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "API Version (V-1.0)"); });
-
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "API Version (V-1.0)"); });
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
