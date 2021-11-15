@@ -13,7 +13,7 @@ namespace Challenge.Helpers
     {
         public static void ConfigureIOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<MongoDBSettings>(options => configuration.GetSection("MongoDBSettings"));
+            services.Configure<MongoDBSettings>(options => configuration.GetSection("MongoDBSettings").Bind(options));
         }
 
         public static void ConfigureJWTAuthentication(this IServiceCollection services, IConfiguration configuration)

@@ -2,8 +2,7 @@
 
 namespace Challenge.Common.Services
 {
-    public interface ICrudService<T>
-        where T : AggregateRoot<string>
+    public interface ICrudService<T> where T : AggregateRoot<string>
     {
         IList<T> Get();
 

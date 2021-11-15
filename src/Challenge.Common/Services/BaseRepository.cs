@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Challenge.Core.Settings;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using static Challenge.Core.Enums.Enums;
@@ -13,12 +14,14 @@ namespace Challenge.Common.Services
     {
         private readonly IMongoCollection<TEntity> mongoCollection;
         private readonly MongoClient client;
+        private readonly MongoDBSettings _mongoDbSettings;
 
-        public BaseRepository(MongoDBSettings settings)
+        public BaseRepository(IOptions<MongoDBSettings> mongoDbSettings)
         {
-            client = new MongoClient(settings.ConnectionString);
+            _mongoDbSettings = mongoDbSettings.Value;
+            client = new MongoClient(_mongoDbSettings.ConnectionString);
 
-            var db = client.GetDatabase(settings.DatabaseName);
+            var db = client.GetDatabase(_mongoDbSettings.DatabaseName);
             mongoCollection = db.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 

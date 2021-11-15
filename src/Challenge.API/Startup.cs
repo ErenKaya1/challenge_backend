@@ -1,4 +1,7 @@
+using Challenge.API.Filters;
 using Challenge.Application;
+using Challenge.Application.Services.Cache.Redis;
+using Challenge.Application.Services.Localization;
 using Challenge.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,13 +23,27 @@ namespace Challenge.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                config.Filters.Add(typeof(GlobalExceptionFilter));
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
 
             services.AddMessageHandlers();
             services.AddApplicationServices();
             services.ConfigureIOptions(Configuration);
             services.ConfigureJWTAuthentication(Configuration);
             services.ConfigureSwagger();
+            services.AddScoped<ILocalizationService, LocalizationService>();
+            services.AddScoped<IRedisService, RedisService>();
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("Redis");
+                options.InstanceName = "Challenge-";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
