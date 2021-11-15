@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+using Microsoft.Extensions.Logging;
 
 namespace Challenge.API
 {
@@ -43,7 +44,7 @@ namespace Challenge.API
                 {
                     webBuilder.UseUrls("http://0.0.0.0:25011");
                     webBuilder.UseStartup<Startup>();
-                });
+                }).ConfigureLogging(config => config.ClearProviders()).UseSerilog();
     }
 
     public class ThreadIdEnricher : ILogEventEnricher
