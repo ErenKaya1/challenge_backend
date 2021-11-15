@@ -56,30 +56,6 @@ namespace Challenge.Application
                 }
             }
 
-            var aggregateRootTypes = typeof(AggregateRoot<>).Assembly.GetTypes().Where(x => x.BaseType == typeof(AggregateRoot<string>)).ToList();
-
-            var genericHandlerTypes = new[]
-            {
-                typeof(GetEntititesQueryHandler<>),
-                typeof(GetEntityByIdQueryHandler<>),
-                typeof(AddOrUpdateEntityCommandHandler<>),
-                typeof(DeleteEntityCommandHandler<>),
-            };
-
-            foreach (var aggregateRootType in aggregateRootTypes)
-            {
-                foreach (var genericHandlerType in genericHandlerTypes)
-                {
-                    var handlerType = genericHandlerType.MakeGenericType(aggregateRootType);
-                    var handlerInterfaces = handlerType.GetInterfaces();
-                    var handlerFactory = new HandlerFactory(handlerType);
-                    foreach (var interfaceType in handlerInterfaces)
-                    {
-                        services.AddTransient(interfaceType, provider => handlerFactory.Create(provider, interfaceType));
-                    }
-                }
-            }
-
             return services;
         }
     }
