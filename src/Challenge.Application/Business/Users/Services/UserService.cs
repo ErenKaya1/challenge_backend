@@ -1,8 +1,8 @@
+using Challenge.Application.Business.Users.Entities;
 using Challenge.Common.Events;
 using Challenge.Common.Services;
-using Challenge.Application.Users.Entities;
 
-namespace Challenge.Application.Users.Services
+namespace Challenge.Application.Business.Users.Services
 {
     public class UserService : CrudService<User>, IUserService
     {

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Challenge.Core.Enums
 {
     public static class Enums
@@ -6,6 +8,18 @@ namespace Challenge.Core.Enums
         {
             Deleted,
             Active
+        }
+
+        public enum UserRole
+        {
+            [Display(Name = "Admin")]
+            Admin,
+
+            [Display(Name = "Moderatör")]
+            Moderator,
+
+            [Display(Name = "Kullanıcı")]
+            User
         }
     }
 }

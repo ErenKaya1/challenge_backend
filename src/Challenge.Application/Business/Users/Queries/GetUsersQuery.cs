@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Challenge.Application.Business.Users.Entities;
 using Challenge.Common.Decorators.AuditLog;
 using Challenge.Common.Decorators.DatabaseRetry;
 using Challenge.Common.Queries;
 using Challenge.Common.Services;
 using Challenge.Core.Request;
 using Challenge.Core.Response;
-using Challenge.Application.Users.Entities;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
-namespace Challenge.Application.Users.Queries
+namespace Challenge.Application.Business.Users.Queries
 {
     public class GetUsersQuery : BaseFilter, IQuery<BaseQueryResult<List<User>>>
     {

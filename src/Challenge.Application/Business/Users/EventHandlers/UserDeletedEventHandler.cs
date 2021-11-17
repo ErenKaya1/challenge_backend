@@ -1,9 +1,9 @@
 using System;
+using Challenge.Application.Business.Users.Entities;
 using Challenge.Common.Events;
-using Challenge.Application.Users.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Challenge.Application.Users.EventHandlers
+namespace Challenge.Application.Business.Users.EventHandlers
 {
     public class UserDeletedEventHandler : IDomainEventHandler<EntityDeletedEvent<User>>
     {

@@ -13,13 +13,12 @@ namespace Challenge.API.Filters
             if (context.Exception is ValidationException)
             {
                 var response = new BaseResponse<bool> { HasError = true, Message = context.Exception.Message };
-
                 context.Result = new OkObjectResult(response);
             }
             else if (context.Exception is UnauthorizedAccessException)
                 context.Result = new UnauthorizedResult();
-            else if (context.Exception is Exception)
-                context.Result = new StatusCodeResult(500);
+            else if (context.Exception is NotFoundException)
+                context.Result = new NotFoundResult();
         }
     }
 }

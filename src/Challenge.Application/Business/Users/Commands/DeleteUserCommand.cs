@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
+using Challenge.Application.Business.Users.Entities;
 using Challenge.Common.Commands;
 using Challenge.Common.Decorators.AuditLog;
 using Challenge.Common.Services;
-using Challenge.Application.Users.Entities;
 
-namespace Challenge.Application.Users.Commands
+namespace Challenge.Application.Business.Users.Commands
 {
     public class DeleteUserCommand : ICommand
     {
-        public Users.Entities.User User { get; set; }
+        public User User { get; set; }
     }
 
     [AuditLog]
