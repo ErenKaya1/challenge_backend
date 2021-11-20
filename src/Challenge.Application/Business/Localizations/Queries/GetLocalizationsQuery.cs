@@ -8,8 +8,6 @@ using Challenge.Common.Services;
 using Challenge.Core.Request;
 using Challenge.Core.Response;
 using Challenge.Application.Business.Localizations.Entities;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace Challenge.Application.Business.Localizations.Queries
 {
