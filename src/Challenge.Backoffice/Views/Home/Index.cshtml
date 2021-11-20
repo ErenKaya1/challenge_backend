@@ -1,8 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="navbar navbar-expand-md navbar-light navbar-sticky mb-4">
+    <div class="text-center d-md-none w-100">
+        <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse"
+            data-target="#navbar-demo2-mobile">
+            <i class="icon-menu7 mr-2"></i>
+            Menü
+        </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar-demo2-mobile">
+        <span class="navbar-text">
+            <i class="icon-user-check mr-2"></i>
+            <a href="javascript:void(0)">@User.Claims.FirstOrDefault(x => x.Type ==
+                "Email")?.Value.ToString()</a> ile oturum açtınız.
+        </span>
+        <ul class="navbar-nav ml-md-auto">
+        </ul>
+    </div>
+</div>
+
+<div class="page-content pt-0">
+    @await Component.InvokeAsync("SidebarMenu")
+    <div class="content-wrapper">
+        <div class="content">
+            @await Component.InvokeAsync("Alert")
+            <div class="card">
+                <div class="card-header header-elements-inline">
+                    <h5 class="card-title">Tebrik Kartları</h5>
+                </div>
+                <div class="card-body">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

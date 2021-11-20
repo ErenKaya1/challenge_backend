@@ -58,8 +58,10 @@ namespace Challenge.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "API Version (V-1.0)"); });
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

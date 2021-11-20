@@ -1,0 +1,100 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+    var action = ViewContext.RouteData.Values["action"].ToString();
+}
+
+<div class="sidebar sidebar-light sidebar-main sidebar-expand-md align-self-start">
+    <div class="sidebar-mobile-toggler text-center">
+        <a href="#" class="sidebar-mobile-main-toggle">
+            <i class="icon-arrow-left8"></i>
+        </a>
+        <span class="font-weight-semibold">Menü</span>
+        <a href="#" class="sidebar-mobile-expand">
+            <i class="icon-screen-full"></i>
+            <i class="icon-screen-normal"></i>
+        </a>
+    </div>
+    <div class="sidebar-content">
+        <div class="card card-sidebar-mobile">
+            <div class="sidebar-user">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="mr-3">
+                            <a href="/Account">
+                                <img src="/images/avatar.svg" width="38" height="38" class="rounded-circle" alt="">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <div class="media-title font-weight-semibold">@User.Claims.FirstOrDefault(x => x.Type ==
+                                "FirstName")?.Value @User.Claims.FirstOrDefault(x => x.Type == "LastName")?.Value</div>
+                            <div class="font-size-xs opacity-50">
+                                All4Baby Yönetim
+                            </div>
+                        </div>
+                        <div class="ml-3 align-self-center">
+                            <a href="#" class="text-white">
+                                <i class="icon-cog3"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+
+                <ul class="nav nav-sidebar" data-nav-type="accordion">
+                    <li class="nav-item-header mt-0">
+                        <div class="text-uppercase font-size-xs line-height-xs">Genel</div> <i class="icon-menu"
+                            title="Genel"></i>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/" class="nav-link @(controller == "Home" ? "active" : "")">
+                            <i class="icon-home" data-popup="tooltip" title="Genel İstatistikler"></i>
+                            <span>Genel İstatistikler</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="icon-price-tag2" data-popup="tooltip" title="Etiket Yönetimi"></i>
+                            <span>Etiket Yönetimi</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link">
+                            <i class="icon-barcode2" data-popup="tooltip" title="Mağaza"></i>
+                            <span>Mağaza</span>
+                        </a>
+                        <ul class="nav nav-group-sub">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class=" icon-ticket" data-popup="tooltip" title="Koleksiyonlar"></i>
+                                    <span>Koleksiyonlar</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.nav-link').on('click', function () {
+        if (!$(this).parent().hasClass('nav-item-submenu')) {
+            $(this).find('i').removeAttr('class').addClass('icon-spinner spinner')
+        }
+    });
+
+    $('.navbar-nav-link').on('click', function () {
+        if ($(this).attr('href') != "javascript:;" && $(this).attr('href') != "#") {
+            $(this).find('i').removeAttr('class').addClass('icon-spinner spinner')
+        }
+    });
+
+    $('.btn-primary').on('click', function (e) {
+        $(this).find('i').removeAttr('class').addClass('icon-spinner spinner')
+    });
+</script>
