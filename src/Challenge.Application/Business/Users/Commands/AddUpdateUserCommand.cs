@@ -27,6 +27,12 @@ namespace Challenge.Application.Business.Users.Commands
 
         public async Task Handle(AddUpdateUserCommand command)
         {
+            if (string.IsNullOrWhiteSpace(command.User.Image))
+            {
+                // TODO: Eren - Default Profile Photo Url From AWS S3.
+                command.User.Image = "";
+            }
+            
             _service.AddOrUpdate(command.User);
             await _redisService.AddAsync($"user-{command.User.Id}", command.User, CacheTimes.CACHE_120_DK);
         }

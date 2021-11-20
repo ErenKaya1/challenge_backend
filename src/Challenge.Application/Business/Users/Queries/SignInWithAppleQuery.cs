@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -9,9 +10,12 @@ using Challenge.Common.Decorators.DatabaseRetry;
 using Challenge.Common.Queries;
 using Challenge.Common.Services;
 using Challenge.Core.Exceptions;
+using Challenge.Core.Extensions;
 using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
+using MongoDB.Bson;
+using static Challenge.Core.Enums.Enums;
 
 namespace Challenge.Application.Business.Users.Queries
 {
@@ -58,14 +62,8 @@ namespace Challenge.Application.Business.Users.Queries
             if (firebaseToken != null)
                 userRecord = await defaultAuth.GetUserAsync(firebaseToken.Uid);
 
-            if (userRecord == null)
-                throw new ValidationException("Apple ID kullanıcı bilgilerini doğrulayamadı.");
-
-            if (string.IsNullOrWhiteSpace(userRecord.Email))
-                throw new ValidationException("Apple hesabından e-posta bilgisini alamadık.");
-
-            if (string.IsNullOrWhiteSpace(userRecord.DisplayName))
-                throw new ValidationException("Apple hesabından ad-soyad bilgilerini alamadık.");
+            if (userRecord == null || string.IsNullOrWhiteSpace(userRecord.DisplayName) || string.IsNullOrWhiteSpace(userRecord.Email))
+                throw new ValidationException("Apple hesabından e-posta bilgisini alamadık, Apple hesabınızda kayıtlı bir e-posta adresi olmayabilir. Eğer bu hatayı almaya devam ederseniz lütfen diğer oturum açma seçeneklerini kullanın.");
 
             if (!string.IsNullOrWhiteSpace(query.UserId))
             {
@@ -74,9 +72,8 @@ namespace Challenge.Application.Business.Users.Queries
                 if (user.ExternalLogins.Any(x => x.ProviderName == "APPLE" && x.ProviderId == userRecord.Uid))
                     throw new ValidationException("Apple hesabınız profilinize zaten bağlı.");
 
-                var control = await _userRepo.AnyAsync(x => x.Id != user.Id && x.ExternalLogins.Any(y => y.ProviderName == "APPLE" && y.ProviderId == userRecord.Uid));
-                if (control)
-                    throw new ValidationException("Bu hesap başka bir kullanıcı tarafından kullanılıyor.");
+                if (await _userRepo.AnyAsync(x => x.Id != user.Id && x.ExternalLogins.Any(y => y.ProviderName == "APPLE" && y.ProviderId == userRecord.Uid)))
+                    throw new ValidationException("Bu Apple hesabı başka bir kullanıcı tarafından kullanılıyor.");
 
                 user.ExternalLogins.Add(new ExternalLogin
                 {
@@ -96,16 +93,44 @@ namespace Challenge.Application.Business.Users.Queries
                     user = await _userRepo.FirstOrDefaultByAsync(x => x.Email == userRecord.Email);
                     if (user == null)
                     {
-                        var password = "asdasd";
-                        user = await _dispatcher.Dispatch(new SignUpQuery
+                        user = new User
                         {
                             Email = userRecord.Email,
-                            FirstName = "",
-                            LastName = "",
-                            Password = password,
-                            PasswordConfirm = password,
-                            IpAddress = query.IpAddress
-                        });
+                            Password = null,
+                            SignUpIpAddress = query.IpAddress,
+                            ExternalLogins = new List<ExternalLogin>
+                            {
+                                new ExternalLogin
+                                {
+                                    Id = ObjectId.GenerateNewId().ToString(),
+                                    ProviderName = "APPLE",
+                                    ProviderId = userRecord.Uid
+                                }
+                            },
+                            EmailConfirmation = new EmailConfirmation
+                            {
+                                IsVerified = true
+                            },
+                            PhoneNumberConfirmation = new PhoneNumberConfirmation
+                            {
+                                Code = null,
+                                IsVerified = false,
+                                LastCodeSendDate = null
+                            },
+                            BanInfo = new BanInfo
+                            {
+                                IsBanned = false,
+                                BanReason = null,
+                                BanDate = null
+                            },
+                            Role = UserRole.User,
+                            SetupCompleted = false,
+                            HideMyData = false,
+
+                        };
+
+                        (user.FirstName, user.LastName) = userRecord.DisplayName.GetFirstAndLastNameByFullName();
+                        await _dispatcher.Dispatch(new AddUpdateUserCommand { User = user });
                     }
                     else
                     {

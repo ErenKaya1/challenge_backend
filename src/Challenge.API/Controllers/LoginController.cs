@@ -8,7 +8,6 @@ using Challenge.API.Controllers.Base;
 using Challenge.Application.Business.Users.Entities;
 using Challenge.Application.Business.Users.Queries;
 using Challenge.Application.Business.Users.Response;
-using Challenge.Application.Services.Localization;
 using Challenge.Common;
 using Challenge.Core.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -60,15 +59,25 @@ namespace Challenge.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignInWithGoogle()
+        public async Task<IActionResult> SignInWithGoogle([FromBody] SignInWithGoogleQuery query)
         {
-            return Ok();
+            var response = new BaseResponse<SignInResponse>();
+            query.IpAddress = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            var user = await _dispatcher.Dispatch(query);
+            response.Data = new SignInResponse { Token = WriteToken(user) };
+
+            return Ok(response);
         }
 
         [HttpPost]
-        public IActionResult SignInWithFacebook()
+        public async Task<IActionResult> SignInWithFacebook([FromBody] SignInWithFacebookQuery query)
         {
-            return Ok();
+            var response = new BaseResponse<SignInResponse>();
+            query.IpAddress = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            var user = await _dispatcher.Dispatch(query);
+            response.Data = new SignInResponse { Token = WriteToken(user) };
+
+            return Ok(response);
         }
 
         [NonAction]

@@ -1,5 +1,6 @@
 using System;
 using Challenge.Application.Business.Users.Entities;
+using Challenge.Application.Services.Cache.Redis;
 using Challenge.Common.Events;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,10 +15,12 @@ namespace Challenge.Application.Business.Users.EventHandlers
             _serviceProvider = serviceProvider;
         }
 
-        public void Handle(EntityDeletedEvent<User> domainEvent)
+        public async void Handle(EntityDeletedEvent<User> domainEvent)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
+                var redisService = scope.ServiceProvider.GetRequiredService<IRedisService>();
+                await redisService.RemoveAsync($"user-{domainEvent.Entity.Id}");
             }
         }
     }

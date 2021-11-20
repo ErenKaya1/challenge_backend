@@ -9,6 +9,7 @@ using Challenge.Application.Business.Users.Commands;
 using Challenge.Application.Business.Users.Entities;
 using System.ComponentModel.DataAnnotations;
 using ValidationException = Challenge.Core.Exceptions.ValidationException;
+using Challenge.Core.Security.Hash;
 
 namespace Challenge.Application.Business.Users.Queries
 {
@@ -31,11 +32,13 @@ namespace Challenge.Application.Business.Users.Queries
     {
         private readonly IRepository<User> _userRepo;
         private readonly Dispatcher _dispatcher;
+        private readonly IHasher _hasher;
 
-        public SignUpQueryHandler(IRepository<User> userRepo, Dispatcher dispatcher)
+        public SignUpQueryHandler(IRepository<User> userRepo, Dispatcher dispatcher, IHasher hasher)
         {
             _dispatcher = dispatcher;
             _userRepo = userRepo;
+            _hasher = hasher;
         }
 
         public async Task<User> Handle(SignUpQuery query)
@@ -55,8 +58,14 @@ namespace Challenge.Application.Business.Users.Queries
                 FirstName = query.FirstName,
                 LastName = query.LastName,
                 SignUpIpAddress = query.IpAddress,
-                IsBanned = false,
-                SetupCompleted = false
+                SetupCompleted = false,
+                Password = _hasher.CreateHash(query.Password),
+                BanInfo = new BanInfo
+                {
+                    IsBanned = false,
+                    BanReason = null,
+                    BanDate = null
+                }
             };
 
             await _dispatcher.Dispatch(new AddUpdateUserCommand { User = user });

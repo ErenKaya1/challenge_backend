@@ -2,6 +2,8 @@ using Challenge.API.Filters;
 using Challenge.Application;
 using Challenge.Application.Services.Cache.Redis;
 using Challenge.Application.Services.Localization;
+using Challenge.Core.Security.Encryption;
+using Challenge.Core.Security.Hash;
 using Challenge.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +40,8 @@ namespace Challenge.API
             services.ConfigureSwagger();
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<IRedisService, RedisService>();
+            services.AddScoped<IHasher, Hasher>();
+            services.AddScoped<IEncryption, Encryption>();
 
             services.AddDistributedRedisCache(options =>
             {
