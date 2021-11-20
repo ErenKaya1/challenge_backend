@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Challenge.Backoffice.Controllers.Base;
+﻿using Challenge.Backoffice.Controllers.Base;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Challenge.Backoffice.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public IActionResult Index()
         {

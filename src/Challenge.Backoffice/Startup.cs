@@ -5,6 +5,7 @@ using Challenge.Backoffice.Filters;
 using Challenge.Core.Security.Encryption;
 using Challenge.Core.Security.Hash;
 using Challenge.Helpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,8 @@ namespace Challenge.Backoffice
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => { options.LoginPath = "/login"; });
 
             services.AddMessageHandlers();
             services.AddApplicationServices();

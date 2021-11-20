@@ -1,0 +1,75 @@
+@model Challenge.Application.Business.Users.Queries.SignInAdminQuery
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap | Challenge Backoffice</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+        type="text/css">
+    <link href="/css/icons/icomoon/styles.min.css" rel="stylesheet" type="text/css">
+
+    <link href="/lib/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/lib/bootstrap/bootstrap-limitless.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/layout.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/components.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/colors.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="bg-slate-800" style="background-image: url(/admin/theme/img/login-bgcover.jpg);  background-size: cover">
+    <div class="page-content">
+        <div class="content-wrapper">
+            <div class="content d-flex justify-content-center align-items-center">
+
+                <form asp-controller="Login" asp-action="Index" asp-antiforgery="true" class="login-form">
+                    <div class="card mb-0" style="border-radius: 10px;">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+
+                                <img src="" alt="logo" class="mb-3" style="height: 100px;" />
+                                <h5 class="mb-0">Giriş</h5>
+                                <span class="d-block text-muted">
+                                    Yönetici arayüzüne giriş yapmak için kullanıcı bilgilerinizle giriş yapınız.
+                                </span>
+                            </div>
+
+                            @await Component.InvokeAsync("Alert")
+
+                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                <input asp-for="Email" class="form-control" placeholder="E-Posta"
+                                    style="border-radius: 10px;">
+                                <div class="form-control-feedback">
+                                    <i class="icon-user text-muted"></i>
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                <input asp-for="Password" class="form-control" placeholder="Parola" type="password"
+                                    style="border-radius: 10px;">
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock2 text-muted"></i>
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block"
+                                    style="background-color: #6B1F8C;    border-radius: 10px;">Login <i
+                                        class="icon-circle-right2 ml-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

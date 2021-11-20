@@ -6,6 +6,7 @@ namespace Challenge.Application.Business.Users.Entities
     {
         public bool IsVerified { get; set; }
         public string Code { get; set; }
+        public DateTime? ExpireDate { get; set; }
         public DateTime? LastCodeSendDate { get; set; }
     }
 }

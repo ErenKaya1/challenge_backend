@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Challenge.Backoffice.Controllers.Base
 {
-    [Authorize("Admin,Moderator")]
+    [Authorize(Roles = "Admin,Moderator")]
     public class BaseController : Controller
     {
-        
+
     }
 }
