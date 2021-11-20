@@ -30,9 +30,9 @@ namespace Challenge.Helpers
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = "i",
-                        ValidAudience = "a",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSecurityKey"]))
+                        ValidIssuer = configuration.GetSection("JwtSettings").GetSection("Issuer").ToString(),
+                        ValidAudience = configuration.GetSection("JwtSettings").GetSection("Audience").ToString(),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings").GetSection("SecurityKey").ToString()))
                     };
                 });
         }
