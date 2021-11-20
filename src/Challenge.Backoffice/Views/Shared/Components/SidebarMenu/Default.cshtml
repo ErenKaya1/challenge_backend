@@ -28,7 +28,7 @@
                             <div class="media-title font-weight-semibold">@User.Claims.FirstOrDefault(x => x.Type ==
                                 "FirstName")?.Value @User.Claims.FirstOrDefault(x => x.Type == "LastName")?.Value</div>
                             <div class="font-size-xs opacity-50">
-                                All4Baby Yönetim
+                                Challenge Backoffice
                             </div>
                         </div>
                         <div class="ml-3 align-self-center">
@@ -48,29 +48,22 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="/" class="nav-link @(controller == "Home" ? "active" : "")">
-                            <i class="icon-home" data-popup="tooltip" title="Genel İstatistikler"></i>
-                            <span>Genel İstatistikler</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="icon-price-tag2" data-popup="tooltip" title="Etiket Yönetimi"></i>
-                            <span>Etiket Yönetimi</span>
+                        <a href="#" class="nav-link @(controller == "Home" ? "active" : "")">
+                            <i class="icon-home" data-popup="tooltip" title=""></i>
+                            <span>Menu Link</span>
                         </a>
                     </li>
 
                     <li class="nav-item nav-item-submenu">
                         <a href="#" class="nav-link">
-                            <i class="icon-barcode2" data-popup="tooltip" title="Mağaza"></i>
-                            <span>Mağaza</span>
+                            <i class="icon-barcode2" data-popup="tooltip" title=""></i>
+                            <span>Dropdown Menu</span>
                         </a>
                         <ul class="nav nav-group-sub">
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class=" icon-ticket" data-popup="tooltip" title="Koleksiyonlar"></i>
-                                    <span>Koleksiyonlar</span>
+                                    <i class=" icon-ticket" data-popup="tooltip" title=""></i>
+                                    <span>Dropdown Item</span>
                                 </a>
                             </li>
                         </ul>

@@ -16,6 +16,7 @@ namespace Challenge.Helpers
             services.Configure<MongoDBSettings>(options => configuration.GetSection("MongoDBSettings").Bind(options));
             services.Configure<AmazonS3Settings>(options => configuration.GetSection("AmazonS3Settings").Bind(options));
             services.Configure<FacebookClientSettings>(options => configuration.GetSection("FacebookClientSettings").Bind(options));
+            services.Configure<JWTSettings>(options => configuration.GetSection("JWTSettings").Bind(options));
         }
 
         public static void ConfigureJWTAuthentication(this IServiceCollection services, IConfiguration configuration)

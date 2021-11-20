@@ -1,6 +1,7 @@
 using Challenge.API.Filters;
 using Challenge.Application;
 using Challenge.Application.Services.Cache.Redis;
+using Challenge.Application.Services.CurrentUser;
 using Challenge.Application.Services.Localization;
 using Challenge.Core.Security.Encryption;
 using Challenge.Core.Security.Hash;
@@ -42,12 +43,15 @@ namespace Challenge.API
             services.AddScoped<IRedisService, RedisService>();
             services.AddScoped<IHasher, Hasher>();
             services.AddScoped<IEncryption, Encryption>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = Configuration.GetConnectionString("Redis");
                 options.InstanceName = "Challenge-";
             });
+
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

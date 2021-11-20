@@ -10,7 +10,9 @@ using Challenge.Application.Business.Users.Queries;
 using Challenge.Application.Business.Users.Response;
 using Challenge.Common;
 using Challenge.Core.Response;
+using Challenge.Core.Settings;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Challenge.API.Controllers
@@ -18,10 +20,12 @@ namespace Challenge.API.Controllers
     public class LoginController : BaseController
     {
         private readonly Dispatcher _dispatcher;
+        private readonly JWTSettings _jwtSettings;
 
-        public LoginController(Dispatcher dispatcher)
+        public LoginController(Dispatcher dispatcher, IOptions<JWTSettings> jwtSettings)
         {
             _dispatcher = dispatcher;
+            _jwtSettings = jwtSettings.Value;
         }
 
         [HttpPost]
@@ -88,15 +92,15 @@ namespace Challenge.API.Controllers
             claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
             var token = new JwtSecurityToken(
-                  issuer: "i",
-                  audience: "a",
+                  issuer: _jwtSettings.Issuer,
+                  audience: _jwtSettings.Audience,
                   claims: claims,
                   expires: DateTime.UtcNow.AddDays(30),
                   notBefore: DateTime.UtcNow,
                   signingCredentials:
                       new SigningCredentials(
                           new SymmetricSecurityKey(
-                              Encoding.UTF8.GetBytes("all4baby2021!!1!1!!1pwd")), SecurityAlgorithms.HmacSha256)
+                              Encoding.UTF8.GetBytes(_jwtSettings.SecurityKey)), SecurityAlgorithms.HmacSha256)
               );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
