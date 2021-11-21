@@ -6,6 +6,7 @@ using Challenge.Common;
 using Challenge.Common.Decorators.AuditLog;
 using Challenge.Common.Queries;
 using Challenge.Common.Services;
+using Challenge.Core.Attributes;
 using Challenge.Core.Security.Hash;
 using static Challenge.Core.Enums.Enums;
 
@@ -13,7 +14,11 @@ namespace Challenge.Application.Business.Users.Queries
 {
     public class SignInAdminQuery : IQuery<User>
     {
+        [CustomRequired]
+        [EmailField]
         public string Email { get; set; }
+
+        [CustomRequired]
         public string Password { get; set; }
     }
 

@@ -5,13 +5,18 @@ using Challenge.Common.Decorators.AuditLog;
 using Challenge.Common.Decorators.DatabaseRetry;
 using Challenge.Common.Queries;
 using Challenge.Common.Services;
+using Challenge.Core.Attributes;
 using Challenge.Core.Exceptions;
 
 namespace Challenge.Application.Business.Users.Queries
 {
     public class SignInWithEmailQuery : IQuery<User>
     {
+        [CustomRequired]
+        [EmailField]
         public string Email { get; set; }
+
+        [CustomRequired]
         public string Password { get; set; }
 
         [JsonIgnore]

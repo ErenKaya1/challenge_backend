@@ -7,6 +7,7 @@ using Challenge.Common.Decorators.AuditLog;
 using Challenge.Common.Decorators.DatabaseRetry;
 using Challenge.Common.Queries;
 using Challenge.Common.Services;
+using Challenge.Core.Attributes;
 using static Challenge.Core.Enums.Enums;
 
 namespace Challenge.Application.Business.Users.Queries
@@ -14,7 +15,12 @@ namespace Challenge.Application.Business.Users.Queries
     public class VerifyPhoneNumberAdminQuery : IQuery<VerifyPhoneNumberAdminQueryResult>
     {
         public bool IsPersistent { get; set; }
+
+        [CustomRequired]
+        [EmailField]
         public string Email { get; set; }
+
+        [CustomRequired]
         public string Code { get; set; }
     }
 

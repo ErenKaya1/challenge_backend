@@ -7,19 +7,32 @@ using Challenge.Common.Queries;
 using Challenge.Common.Services;
 using Challenge.Application.Business.Users.Commands;
 using Challenge.Application.Business.Users.Entities;
-using System.ComponentModel.DataAnnotations;
 using ValidationException = Challenge.Core.Exceptions.ValidationException;
 using Challenge.Core.Security.Hash;
+using Challenge.Core.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Challenge.Application.Business.Users.Queries
 {
     public class SignUpQuery : IQuery<User>
     {
+        [CustomRequired]
         public string FirstName { get; set; }
+
+        [CustomRequired]
         public string LastName { get; set; }
+
+        [PhoneNumberField]
         public string PhoneNumber { get; set; }
+
+        [EmailField]
         public string Email { get; set; }
+
+        [CustomRequired]
         public string Password { get; set; }
+
+        [CustomRequired]
+        [Compare("Password", ErrorMessage = "Parolalar uyuşmuyor.")]
         public string PasswordConfirm { get; set; }
 
         [JsonIgnore]

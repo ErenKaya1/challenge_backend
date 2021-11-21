@@ -1,5 +1,7 @@
 using System.Globalization;
 using System.Linq;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace Challenge.Core.Extensions
 {
@@ -31,6 +33,47 @@ namespace Challenge.Core.Extensions
                 return string.Empty;
 
             return value.First().ToString().ToUpper(new CultureInfo("tr-TR")) + value.Substring(1);
+        }
+
+        public static bool IsValidEmailAddress(this string value)
+        {
+            try
+            {
+                var temp = new MailAddress(value);
+
+                string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
+                var regex = new Regex(validEmailPattern, RegexOptions.IgnoreCase);
+
+                if (!regex.IsMatch(value))
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValidPhoneNumber(this string value)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    return false;
+
+                string validPattern = @"\+[0-9]{4,14}$";
+                var regex = new Regex(validPattern, RegexOptions.IgnoreCase);
+
+                if (!regex.IsMatch(value))
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+            
+            return true;
         }
     }
 }

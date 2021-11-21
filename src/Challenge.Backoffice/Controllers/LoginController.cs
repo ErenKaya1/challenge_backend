@@ -38,7 +38,7 @@ namespace Challenge.Backoffice.Controllers
                 return View(query);
             }
 
-            var model = new VerifyPhoneNumberAdminQuery { Email = query.Email };
+            var model = new VerifyPhoneNumberAdminQuery { Email = query.Email, IsPersistent = false };
 
             return View("VerifyPhoneNumber", model);
         }
@@ -71,7 +71,7 @@ namespace Challenge.Backoffice.Controllers
 
             if (!string.IsNullOrWhiteSpace(returnUrl))
                 return LocalRedirect(returnUrl);
-                
+
             return RedirectToAction("Index", "Home");
         }
 
