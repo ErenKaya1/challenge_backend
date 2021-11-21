@@ -1,5 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
+
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+    var action = ViewContext.RouteData.Values["action"].ToString();
+
+    var returnUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
 }
 
 <div class="navbar navbar-expand-md navbar-light navbar-sticky mb-4">
@@ -13,7 +18,7 @@
     <div class="navbar-collapse collapse" id="navbar-demo2-mobile">
         <span class="navbar-text">
             <i class="icon-user-check mr-2"></i>
-            <a href="javascript:void(0)">@User.Claims.FirstOrDefault(x => x.Type ==
+            <a href="@Url.Action("Index", "Account")">@User.Claims.FirstOrDefault(x => x.Type ==
                 "Email")?.Value.ToString()</a> ile oturum açtınız.
         </span>
         <ul class="navbar-nav ml-md-auto">

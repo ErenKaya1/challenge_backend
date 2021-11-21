@@ -1,0 +1,13 @@
+.btn-backoffice-primary {
+  background-color: #03e3fc;
+  color: #fff;
+}
+
+.btn-backoffice-primary:hover {
+    background-color: #08e3fc;
+    color: #fff;
+  }
+
+.bg-backoffice-primary {
+  background-color: #03e3fc;
+}

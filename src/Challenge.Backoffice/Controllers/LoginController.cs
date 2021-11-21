@@ -57,6 +57,7 @@ namespace Challenge.Backoffice.Controllers
             {
                 new Claim("UserId", result.User.Id),
                 new Claim("Email", result.User.Email),
+                new Claim("FullName", result.User.FirstName + " " + result.User.LastName),
                 new Claim(ClaimTypes.Role, result.User.Role.ToString()),
             };
 

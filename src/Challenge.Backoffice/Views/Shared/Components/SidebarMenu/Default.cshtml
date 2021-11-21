@@ -68,6 +68,26 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li class="nav-item-header mt-0">
+                        <div class="text-uppercase font-size-xs line-height-xs">Diğer</div> <i class="icon-menu"
+                            title="Diğer"></i>
+                    </li>
+
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link">
+                            <i class="icon-barcode2" data-popup="tooltip" title="Ayarlar"></i>
+                            <span>Ayarlar</span>
+                        </a>
+                        <ul class="nav nav-group-sub @(controller is "BackofficeUser" ? "d-block" : "")">
+                            <li class="nav-item">
+                                <a href="/BackofficeUser" class="nav-link @(controller is "BackofficeUser" ? "active" : "")">
+                                    <i class=" icon-ticket" data-popup="tooltip" title="Panel Kullanıcıları"></i>
+                                    <span>Panel Kullanıcıları</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

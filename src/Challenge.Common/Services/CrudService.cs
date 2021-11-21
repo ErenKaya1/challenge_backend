@@ -23,16 +23,16 @@ namespace Challenge.Common.Services
             
             if (adding)
             {
+                entity.CreatedDateTime = DateTime.UtcNow;
                 _repository.Add(entity);
+                
                 _domainEvents.Dispatch(new EntityCreatedEvent<T>(entity, DateTime.UtcNow));
             }
             else
             {
-                var a = _repository.FirstOrDefaultBy(x => x.Id == entity.Id);
-                entity.CreatedDateTime = a.CreatedDateTime;
                 entity.UpdatedDateTime = DateTime.UtcNow;
-
                 _repository.Update(entity);
+
                 _domainEvents.Dispatch(new EntityUpdatedEvent<T>(entity, DateTime.UtcNow));
             }
         }
