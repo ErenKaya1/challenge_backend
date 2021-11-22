@@ -72,8 +72,13 @@ namespace Challenge.Core.Extensions
             {
                 return false;
             }
-            
+
             return true;
+        }
+
+        public static string ToUrlSlug(this string text)
+        {
+            return Regex.Replace(Regex.Replace(Regex.Replace(text.Trim().ToLower().Replace(" ", "-").Replace("(", "-").Replace(")", "-").Replace("ö", "o").Replace(".", "").Replace("ç", "c").Replace("ş", "s").Replace("ı", "i").Replace("ğ", "g").Replace("ü", "u"), @"\s+", " "), @"\s", ""), @"[^a-z0-9\s-]", "").Replace("--", "-");
         }
     }
 }

@@ -22,22 +22,10 @@ namespace Challenge.Core.Enums
             User
         }
 
-        public enum GameMode : byte
+        public enum PolicyType : byte
         {
-            [Display(Name = "Tek Oyunculu")]
-            Single,
-
-            [Display(Name = "İkili Oyun")]
-            PublicDuo,
-
-            [Display(Name = "Özel İkili Oyun")]
-            PrivateDuo,
-
-            [Display(Name = "Grup")]
-            PublicGroup,
-
-            [Display(Name = "Özel Grup")]
-            PrivateGroup,
+            [Display(Name = "KVKK")]
+            KVKK,
         }
     }
 }

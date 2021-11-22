@@ -1,0 +1,221 @@
+@model Challenge.Backoffice.Models.Policy.PolicyIndexVM
+@using Challenge.Core.Extensions
+
+@{
+    ViewData["Title"] = "Sözleşmeler";
+
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+    var action = ViewContext.RouteData.Values["action"].ToString();
+    var returnUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
+}
+
+<div class="navbar navbar-expand-md navbar-light navbar-sticky mb-4">
+    <div class="text-center d-md-none w-100">
+        <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse"
+            data-target="#navbar-demo2-mobile">
+            <i class="icon-menu7 mr-2"></i>
+            Menü
+        </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar-demo2-mobile">
+        <span class="navbar-text">
+            <i class="icon-user-check mr-2"></i>
+            <a href="@Url.Action("Index", "Account")">@User.Claims.FirstOrDefault(x => x.Type ==
+                "Email")?.Value.ToString()</a> ile oturum açtınız.
+        </span>
+        <ul class="navbar-nav ml-md-auto">
+            <li class="nav-item">
+                <a href="javascript:;" class="navbar-nav-link show-filter-area">
+                    Kayıtları Filtrele
+                    <i class="icon-search4 ml-1"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("AddOrUpdate", controller, new { returnUrl })" class="navbar-nav-link">
+                    Yeni Kayıt Oluştur
+                    <i class="icon-plus3 ml-1"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="page-content pt-0">
+    @await Component.InvokeAsync("SidebarMenu")
+    <div class="content-wrapper">
+        <div class="content">
+            @await Component.InvokeAsync("Alert")
+            <div class="filter-card card card-collapsed" style="display: none;">
+                <div class="card-header header-elements-inline">
+                    <h5 class="card-title">Kayıtları Filtrele</h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item collapse-filter-area" data-toggle="tooltip" title="Göster / Gizle"
+                                data-action="collapse"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="@controller" asp-action="@action" method="get">
+                        <fieldset>
+                            <legend class="text-uppercase font-size-sm font-weight-bold">Genel Bilgiler</legend>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label>Ara</label>
+                                    <input asp-for="Query.SearchTerm" class="form-control">
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <a href="@Url.Action(action,controller)" class="btn btn-warning pull-left ">
+                                    <i class="icon-loop3 mr-2"></i>
+                                    Filtreyi Temizle
+                                </a>
+                                <button type="submit" class="btn btn-primary">Filtrele <i class="icon-search4 ml-2"></i></button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header header-elements-inline">
+                    <h5 class="card-title">Panel Kullanıcıları</h5>
+                </div>
+                <div class="card-body">
+                    Toplam <code>@Model.Result.TotalCount</code> kayıttan <code>@Model.Query.Skip ve @(Model.Query.Take + Model.Query.Skip)</code> aralığını görüntülüyorsunuz.
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 100px;">#</th>
+                                    <th>Başlık</th>
+                                    <th>Sözleşme Tipi</th>
+                                    <th class="text-center" style="width: 100px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.Result.Items.Any())
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center">Kayıt Bulunamadı.</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var item in Model.Result.Items)
+                                    {
+                                        <tr>
+                                            <td></td>
+                                            <td>@(item.Title)</td>
+                                            <td>@item.PolicyType.GetDisplayValue()</td>
+                                            <td class="text-center">
+                                                <div class="btn-group justify-content-center">
+                                                    <a href="#" class="btn btn-sm " data-toggle="dropdown"><i class="icon-menu9"></i></a>
+                                                    <div class="dropdown-menu">
+                                                        <a href="@Url.Action("AddOrUpdate", "Policy", new { Id = item.Id, returnUrl = returnUrl })" class="dropdown-item"><i class="icon-search4 mr-2"></i>Görüntüle / Düzenle</a>
+                                                        <a href="javascript:;" onclick="Delete(this);" data-id="@item.Id" class="dropdown-item text-danger"><i class="icon-eraser2 mr-2"></i>Sil</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <select class="form-control" style="width: 200px;" onchange="window.location.href = $(this).val()">
+                            @foreach (var item in "5,10,15,30,50,100".Split(",").ToList())
+                            {
+                                if (Convert.ToInt32(item) == Model.Query.Take)
+                                {
+                                    <option value="@Url.Action(action, controller, new { Model.Query.SearchTerm, Skip = 0, Take = item })" selected>@item Kayıt/Sayfa</option>
+                                }
+                                else
+                                {
+                                    <option value="@Url.Action(action, controller, new { Model.Query.SearchTerm, Skip = 0, Take = item })">@item Kayıt/Sayfa</option>
+                                }
+                            }
+                        </select>
+                        <ul class="pagination pagination-flat pagination-rounded justify-content-center align-self-center mb-3 mt-3">
+                            @if (Model.Result.CurrentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action(action, controller, new { Model.Query.SearchTerm,  Skip = Model.Query.Skip - Model.Query.Take, Take = Model.Query.Take })" class="page-link">← &nbsp; Geri</a>
+                                </li>
+                            }
+
+                            @if (Model.Result.CurrentPage > 4)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action(action, controller, new { Model.Query.SearchTerm, Skip = 0, Take = Model.Query.Take })" class="page-link">1</a>
+                                </li>
+                            }
+
+                            @for (int i = (Model.Result.CurrentPage - 3); i <= Model.Result.CurrentPage - 1; i++)
+                            {
+                                if (i > 0)
+                                {
+                                    <li class="page-item">
+                                        <a href="@Url.Action(action, controller, new { Model.Query.SearchTerm, Skip = (i * Model.Query.Take) - Model.Query.Take, Take = Model.Query.Take })" class="page-link">@i</a>
+                                    </li>
+                                }
+                            }
+
+                            <li class="page-item active">
+                                <a href="#" class="page-link">@Model.Result.CurrentPage</a>
+                            </li>
+
+                            @for (int i = Model.Result.CurrentPage + 1; i <= (Model.Result.CurrentPage + 3); i++)
+                            {
+                                if (i <= Model.Result.PageCount)
+                                {
+                                    <li class="page-item">
+                                        <a href="@Url.Action(action, controller, new { Model.Query.SearchTerm, Skip = (i * Model.Query.Take) - Model.Query.Take, Take = Model.Query.Take })" class="page-link">@i</a>
+                                    </li>
+                                }
+                            }
+
+                            @if ((Model.Result.PageCount - Model.Result.CurrentPage) >= 4)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action(action, controller, new { Model.Query.SearchTerm ,Skip = (Model.Result.PageCount * Model.Query.Take) - Model.Query.Take, Take = Model.Query.Take })" class="page-link">@Model.Result.PageCount</a>
+                                </li>
+                            }
+
+                            @if (Model.Result.CurrentPage < Model.Result.PageCount)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action(action, controller, new { Model.Query.SearchTerm, Skip = Model.Query.Skip + Model.Query.Take, Take = Model.Query.Take })" class="page-link">İleri &nbsp; →</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function Delete(e) {
+            var Id = $(e).data('id');
+            const { value: text } =  Swal.fire({
+                  title: 'Emin Misin?',
+                  text: 'Kayıt kalıcı olarak silinecektir.',
+                  icon: "error",
+                  showCancelButton: true,
+                  confirmButtonColor: '#3a7ae3',
+                  confirmButtonText: 'Evet!',
+                  cancelButtonText: 'Hayır, İptal Edelim!'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      window.location.href = '/Policy/Delete/' + Id + '?returnUrl=@System.Web.HttpUtility.UrlEncode(returnUrl)';
+                  }
+                });
+        }
+    </script>
+}
