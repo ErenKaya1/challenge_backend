@@ -1,5 +1,6 @@
 using Challenge.Application;
 using Challenge.Application.Services.Cache.Redis;
+using Challenge.Application.Services.CurrentUser;
 using Challenge.Application.Services.Localization;
 using Challenge.Backoffice.Filters;
 using Challenge.Core.Security.Encryption;
@@ -35,6 +36,7 @@ namespace Challenge.Backoffice
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => { options.LoginPath = "/login"; });
+            services.AddHttpContextAccessor();
 
             services.AddMessageHandlers();
             services.AddApplicationServices();
@@ -43,6 +45,7 @@ namespace Challenge.Backoffice
             services.AddScoped<IRedisService, RedisService>();
             services.AddScoped<IHasher, Hasher>();
             services.AddScoped<IEncryption, Encryption>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             services.AddDistributedRedisCache(options =>
             {

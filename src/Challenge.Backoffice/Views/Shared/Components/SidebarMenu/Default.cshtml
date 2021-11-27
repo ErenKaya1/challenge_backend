@@ -48,25 +48,10 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link @(controller == "Home" ? "active" : "")">
+                        <a href="/" class="nav-link @(controller == "Home" ? "active" : "")">
                             <i class="icon-home" data-popup="tooltip" title=""></i>
-                            <span>Menu Link</span>
+                            <span>Genel İstatistikler</span>
                         </a>
-                    </li>
-
-                    <li class="nav-item nav-item-submenu">
-                        <a href="#" class="nav-link">
-                            <i class="icon-barcode2" data-popup="tooltip" title=""></i>
-                            <span>Dropdown Menu</span>
-                        </a>
-                        <ul class="nav nav-group-sub">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class=" icon-ticket" data-popup="tooltip" title=""></i>
-                                    <span>Dropdown Item</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
 
                     <li class="nav-item-header mt-0">
@@ -74,12 +59,12 @@
                             title="Diğer"></i>
                     </li>
 
-                    <li class="nav-item nav-item-submenu">
+                    <li class="nav-item nav-item-submenu @(controller is "Policy" || controller is "BackofficeUser" ? "nav-item-open" : "")">
                         <a href="#" class="nav-link">
                             <i class="icon-barcode2" data-popup="tooltip" title="Ayarlar"></i>
                             <span>Ayarlar</span>
                         </a>
-                        <ul class="nav nav-group-sub @(controller is "Policy" || controller is "BackofficeUser" ? "d-block" : "")">
+                        <ul class="nav nav-group-sub" style="display: @(controller is "Policy" || controller is "BackofficeUser" ? "block" : "");">
                             <li class="nav-item">
                                 <a href="/Policy" class="nav-link @(controller is "Policy" ? "active" : "")">
                                     <i class=" icon-ticket" data-popup="tooltip" title="Sözleşmeler"></i>

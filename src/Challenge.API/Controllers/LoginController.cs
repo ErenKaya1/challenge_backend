@@ -74,7 +74,7 @@ namespace Challenge.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignInWithFacebook([FromBody] SignInWithFacebookQuery query)
+        public async Task<IActionResult> SignInWithFacebook([FromBody] SignInWithFacebookQuery query) 
         {
             var response = new BaseResponse<SignInResponse>();
             query.IpAddress = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
@@ -88,7 +88,7 @@ namespace Challenge.API.Controllers
         private string WriteToken(User user)
         {
             var claims = new List<Claim>();
-            claims.Add(new Claim("userId", user.Id));
+            claims.Add(new Claim("UserId", user.Id));
             claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
             var token = new JwtSecurityToken(

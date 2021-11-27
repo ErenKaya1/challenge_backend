@@ -10,6 +10,7 @@ using Challenge.Core.Request;
 using Challenge.Core.Response;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using NinjaNye.SearchExtensions;
 
 namespace Challenge.Application.Business.Users.Queries
 {
@@ -34,6 +35,16 @@ namespace Challenge.Application.Business.Users.Queries
             var result = new BaseQueryResult<List<User>>();
 
             var temp = _repo.GetBy(x => true).Where(x => true).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                temp = temp.Search(x => x.FirstName.ToLower(),
+                                   x => x.LastName.ToLower(),
+                                   x => x.Email.ToLower(),
+                                   x => x.PhoneNumber.ToLower())
+                            .Containing(query.SearchTerm.ToLower())
+                            .AsQueryable();
+            }
 
             result.Items = temp.OrderByDescending(x => x.CreatedDateTime).Skip(query.Skip).Take(query.Take).ToList();
             result.TotalCount = await _repo.CountAsync(x => true); ;

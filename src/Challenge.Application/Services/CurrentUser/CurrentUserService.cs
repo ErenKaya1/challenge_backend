@@ -12,11 +12,11 @@ namespace Challenge.Application.Services.CurrentUser
             _accessor = accessor;
         }
 
-        public string UserId
+        public string Id
         {
             get
             {
-                return _accessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "userId")?.Value ?? _accessor.HttpContext.User.FindFirst("sub")?.Value;
+                return _accessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value ?? _accessor.HttpContext.User.FindFirst("sub")?.Value;
             }
         }
     }

@@ -1,13 +1,20 @@
 @model Challenge.Backoffice.Models.BackofficeUser.BackofficeUserIndexVM
 @using Challenge.Core.Extensions
 @using static Challenge.Core.Enums.Enums
+@using Challenge.Application.Services.CurrentUser
+@inject ICurrentUserService _currentUser
 
 @{
     ViewData["Title"] = "Panel Kullanıcıları";
 
     var controller = ViewContext.RouteData.Values["controller"].ToString();
     var action = ViewContext.RouteData.Values["action"].ToString();
-    var returnUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
+    
+    string returnUrl = "";
+    if (!string.IsNullOrWhiteSpace(ViewContext.HttpContext.Request.Query["returnUrl"]))
+        returnUrl = ViewContext.HttpContext.Request.Query["returnUrl"];
+    else
+        returnUrl = Url.Action("Index", ViewContext.RouteData.Values["controller"].ToString());
 }
 
 <div class="navbar navbar-expand-md navbar-light navbar-sticky mb-4">
@@ -63,6 +70,7 @@
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label>Ara</label>
+                                    <span class="text-muted">(Ad, Soyad, E-Posta, Telefon)</span>
                                     <input asp-for="Query.SearchTerm" class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
@@ -127,7 +135,15 @@
                                                 <div class="btn-group justify-content-center">
                                                     <a href="#" class="btn btn-sm " data-toggle="dropdown"><i class="icon-menu9"></i></a>
                                                     <div class="dropdown-menu">
-                                                        <a href="@Url.Action("AddOrUpdate", "BackofficeUser", new { Id = item.Id, returnUrl = returnUrl })" class="dropdown-item"><i class="icon-search4 mr-2"></i>Görüntüle / Düzenle</a>
+                                                        @if (item.Id == _currentUser.Id)
+                                                        {
+                                                            <a href="/Account" class="dropdown-item"><i class="icon-search4 mr-2"></i>Hesap Ayarları</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Action("AddOrUpdate", controller, new { Id = item.Id, returnUrl = returnUrl })" class="dropdown-item"><i class="icon-search4 mr-2"></i>Görüntüle / Düzenle</a>
+                                                        }
+                                                        
                                                         <a href="javascript:void(0)" onclick="Delete(this);" data-id="@item.Id" class="dropdown-item text-danger"><i class="icon-eraser2 mr-2"></i>Sil</a>
                                                     </div>
                                                 </div>

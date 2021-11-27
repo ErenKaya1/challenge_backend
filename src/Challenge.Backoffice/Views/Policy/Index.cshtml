@@ -6,7 +6,12 @@
 
     var controller = ViewContext.RouteData.Values["controller"].ToString();
     var action = ViewContext.RouteData.Values["action"].ToString();
-    var returnUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
+    
+    string returnUrl = "";
+    if (!string.IsNullOrWhiteSpace(ViewContext.HttpContext.Request.Query["returnUrl"]))
+        returnUrl = ViewContext.HttpContext.Request.Query["returnUrl"];
+    else
+        returnUrl = Url.Action("Index", ViewContext.RouteData.Values["controller"].ToString());
 }
 
 <div class="navbar navbar-expand-md navbar-light navbar-sticky mb-4">
