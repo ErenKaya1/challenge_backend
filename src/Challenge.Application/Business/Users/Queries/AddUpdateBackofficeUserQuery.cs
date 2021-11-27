@@ -10,6 +10,8 @@ using Challenge.Common.Decorators.DatabaseRetry;
 using Challenge.Common.Queries;
 using Challenge.Common.Services;
 using Challenge.Core.Response;
+using Challenge.Core.Security.Hash;
+using Challenge.Helpers;
 
 namespace Challenge.Application.Business.Users.Queries
 {
@@ -24,11 +26,13 @@ namespace Challenge.Application.Business.Users.Queries
     {
         private readonly IRepository<User> _userRepo;
         private readonly Dispatcher _dispatcher;
+        private readonly IHasher _hasher;
 
-        public AddUpdateBackofficeUserQueryHandler(IRepository<User> userRepo, Dispatcher dispatcher)
+        public AddUpdateBackofficeUserQueryHandler(IRepository<User> userRepo, Dispatcher dispatcher, IHasher hasher)
         {
             _userRepo = userRepo;
             _dispatcher = dispatcher;
+            _hasher = hasher;
         }
 
         public async Task<List<ValidationError>> Handle(AddUpdateBackofficeUserQuery query)
@@ -66,7 +70,7 @@ namespace Challenge.Application.Business.Users.Queries
                     Email = query.Request.Email,
                     PhoneNumber = query.Request.PhoneNumber,
                     Role = query.Request.Role,
-                    Password = "asdasd"
+                    Password = _hasher.CreateHash(Helper.GenerateKey(8))
                 };
 
                 await _dispatcher.Dispatch(new AddUpdateUserCommand { User = user });
