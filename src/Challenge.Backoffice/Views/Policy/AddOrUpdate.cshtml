@@ -1,0 +1,93 @@
+@model Challenge.Application.Business.Policies.Commands.AddUpdatePolicyCommand
+@using static Challenge.Core.Enums.Enums
+
+@{
+    ViewData["Title"] = "Sözleşme Ekle / Düzenle";
+
+    string returnUrl = "";
+    if (!string.IsNullOrWhiteSpace(ViewContext.HttpContext.Request.Query["returnUrl"]))
+        returnUrl = ViewContext.HttpContext.Request.Query["returnUrl"];
+    else
+        returnUrl = Url.Action("Index", ViewContext.RouteData.Values["controller"].ToString());
+}
+
+<div class="navbar navbar-expand-md navbar-light navbar-sticky mb-4">
+    <div class="text-center d-md-none w-100">
+        <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-demo2-mobile">
+            <i class="icon-menu7 mr-2"></i>
+            Menü
+        </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar-demo2-mobile">
+        <span class="navbar-text">
+            <i class="icon-user-check mr-2"></i>
+            <a href="@Url.Action("Index", "Account")">@User.Claims.FirstOrDefault(x => x.Type == "Email")?.Value.ToString()</a> ile oturum açtınız.
+        </span>
+        <ul class="navbar-nav ml-md-auto">
+            <li class="nav-item">
+                <a href="@returnUrl" class="navbar-nav-link">
+                    Listeye Dön
+                    <i class="icon-arrow-right6 ml-1"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="page-content pt-0">
+    @await Component.InvokeAsync("SidebarMenu")
+    <div class="content-wrapper">
+        <div class="content">
+            @await Component.InvokeAsync("Alert")
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-header header-elements-inline">
+                                <h5 class="card-title">Sözleşme Ekle / Düzenle</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form asp-controller="Policy" asp-action="AddOrUpdate" asp-antiforgery="true" method="post">
+                                <input asp-for="Policy.Id" type="hidden">
+                                <input asp-for="Policy.CreatedDateTime" type="hidden">
+                                <div class="row">
+                                    <div class="form-group col-md-8">
+                                        <label asp-for="Policy.Title">Sözleşme Başlığı</label>
+                                        <input asp-for="Policy.Title" class="form-control">
+                                        <span asp-validation-for="Policy.Title" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label asp-for="Policy.PolicyType">Sözleşme Tipi</label>
+                                        <select asp-for="Policy.PolicyType" asp-items="@(Html.GetEnumSelectList<PolicyType>())" class="form-control"></select>
+                                        <span asp-validation-for="Policy.PolicyType" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label asp-for="Policy.Content">İçerik</label>
+                                        <textarea asp-for="Policy.Content" class="form-control html-editor"></textarea>
+                                        <span asp-validation-for="Policy.Content" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-backoffice-primary float-right">Kaydet <i class="icon-paperplane ml-2"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="/lib/summernote/summernote.min.js"></script>
+    
+    <script>
+        $(".html-editor").summernote();
+    </script>
+}

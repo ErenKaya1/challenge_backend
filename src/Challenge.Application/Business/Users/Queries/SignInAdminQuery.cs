@@ -46,7 +46,7 @@ namespace Challenge.Application.Business.Users.Queries
                     LastName = "Kaya",
                     Email = "kayainternative@gmail.com",
                     PhoneNumber = "+905396046268",
-                    Password = "erenkaya8585",
+                    Password = "123456",
                     Role = UserRole.Admin,
                 };
 

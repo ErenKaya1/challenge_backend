@@ -21,10 +21,9 @@ namespace Challenge.Application.Business.Localizations.Commands
             _service = service;
         }
 
-        public Task Handle(AddUpdateLocalizationCommand command)
+        public async Task Handle(AddUpdateLocalizationCommand command)
         {
-            _service.AddOrUpdate(command.Localization);
-            return Task.CompletedTask;
+            await _service.AddOrUpdateAsync(command.Localization);
         }
     }
 }

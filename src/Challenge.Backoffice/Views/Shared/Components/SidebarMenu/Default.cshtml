@@ -79,7 +79,14 @@
                             <i class="icon-barcode2" data-popup="tooltip" title="Ayarlar"></i>
                             <span>Ayarlar</span>
                         </a>
-                        <ul class="nav nav-group-sub @(controller is "BackofficeUser" ? "d-block" : "")">
+                        <ul class="nav nav-group-sub @(controller is "Policy" || controller is "BackofficeUser" ? "d-block" : "")">
+                            <li class="nav-item">
+                                <a href="/Policy" class="nav-link @(controller is "Policy" ? "active" : "")">
+                                    <i class=" icon-ticket" data-popup="tooltip" title="Sözleşmeler"></i>
+                                    <span>Sözleşmeler</span>
+                                </a>
+                            </li>
+
                             <li class="nav-item">
                                 <a href="/BackofficeUser" class="nav-link @(controller is "BackofficeUser" ? "active" : "")">
                                     <i class=" icon-ticket" data-popup="tooltip" title="Panel Kullanıcıları"></i>

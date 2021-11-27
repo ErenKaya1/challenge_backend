@@ -13,7 +13,7 @@ namespace Challenge.Core.Entity
         public TKey Id { get; set; }
 
         [JsonIgnore]
-        public virtual DateTime CreatedDateTime { get; set; }
+        public virtual DateTime? CreatedDateTime { get; set; }
 
         [JsonIgnore]
         public virtual DateTime? UpdatedDateTime { get; set; }

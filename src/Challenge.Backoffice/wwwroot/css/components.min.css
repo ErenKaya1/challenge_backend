@@ -2728,9 +2728,9 @@ input[type="text"].noui-height-helper:not(.noUi-target)[data-fouc] {
   font-family: summernote;
   font-style: normal;
   font-weight: 400;
-  src: url(../../../../../../global_assets/css/icons/summernote/summernote.eot?0d0d5fac99cc8774d89eb08b1a8323c4);
-  src: url(../../../../../../global_assets/css/icons/summernote/summernote.eot?#iefix) format("embedded-opentype"), url(../../../../../../global_assets/css/icons/summernote/summernote.woff?0d0d5fac99cc8774d89eb08b1a8323c4) format("woff"),
-    url(../../../../../../global_assets/css/icons/summernote/summernote.ttf?0d0d5fac99cc8774d89eb08b1a8323c4) format("truetype");
+  src: url(../lib/summernote/fonts/summernote.eot?0d0d5fac99cc8774d89eb08b1a8323c4);
+  src: url(../lib/summernote/fonts/summernote.eot?#iefix) format("embedded-opentype"), url(../lib/summernote/fonts/summernote.woff?0d0d5fac99cc8774d89eb08b1a8323c4) format("woff"),
+    url(../lib/summernote/fonts/summernote.ttf?0d0d5fac99cc8774d89eb08b1a8323c4) format("truetype");
 }
 [class*=" note-icon-"]:before,
 [class^="note-icon-"]:before {

@@ -1,3 +1,4 @@
+using System;
 using Challenge.Core.Attributes;
 using static Challenge.Core.Enums.Enums;
 
@@ -21,6 +22,7 @@ namespace Challenge.Application.Business.Users.Request
         [PhoneNumberField]
         public string PhoneNumber { get; set; }
 
+        public DateTime? CreatedDateTime { get; set; }
         public string RegisterIpAddress { get; set; }
         public UserRole Role { get; set; }
     }

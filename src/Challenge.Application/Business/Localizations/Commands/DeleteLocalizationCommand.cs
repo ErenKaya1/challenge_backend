@@ -21,10 +21,9 @@ namespace Challenge.Application.Business.Localizations.Commands
             _service = service;
         }
 
-        public Task Handle(DeleteLocalizationCommand command)
+        public async Task Handle(DeleteLocalizationCommand command)
         {
-            _service.Delete(command.Localization);
-            return Task.CompletedTask;
+            await _service.DeleteAsync(command.Localization);
         }
     }
 }

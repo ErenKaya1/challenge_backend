@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Challenge.Core.Settings;
 using Microsoft.Extensions.Options;
@@ -40,33 +41,32 @@ namespace Challenge.Common.Services
             return await mongoCollection.AsQueryable().Where(x => x.RecordStatus != RecordStatus.Deleted).ToListAsync();
         }
 
-
-        public IMongoQueryable<TEntity> GetBy(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+        public IMongoQueryable<TEntity> GetBy(Expression<Func<TEntity, bool>> expression)
         {
             return GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted);
         }
 
-        public async Task<List<TEntity>> GetByToListAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+        public async Task<List<TEntity>> GetByToListAsync(Expression<Func<TEntity, bool>> expression)
         {
             return await GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted).ToListAsync();
         }
 
-        public bool Any(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+        public bool Any(Expression<Func<TEntity, bool>> expression)
         {
             return GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted).Any();
         }
 
-        public async Task<bool> AnyAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression)
         {
             return await GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted).AnyAsync();
         }
 
-        public int Count(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+        public int Count(Expression<Func<TEntity, bool>> expression)
         {
             return GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted).Count();
         }
 
-        public async Task<int> CountAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> expression)
         {
             return await GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted).CountAsync();
         }
@@ -82,56 +82,46 @@ namespace Challenge.Common.Services
                 .FirstOrDefaultAsync();
         }
 
-        public TEntity FirstOrDefaultBy(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+        public TEntity FirstOrDefaultBy(Expression<Func<TEntity, bool>> expression)
         {
             return GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted).FirstOrDefault();
         }
 
         public async Task<TEntity> FirstOrDefaultByAsync(
-            System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+            Expression<Func<TEntity, bool>> expression)
         {
             return await GetAll().Where(expression).Where(x => x.RecordStatus != RecordStatus.Deleted)
                 .FirstOrDefaultAsync();
         }
 
-        public virtual TEntity Add(TEntity entity, bool forceDates = false)
+        public virtual TEntity Add(TEntity entity)
         {
-            if (!forceDates)
-            {
-                entity.CreatedDateTime = DateTime.UtcNow;
-                entity.UpdatedDateTime = DateTime.UtcNow;
-            }
-
-
-            entity.RecordStatus = Core.Enums.Enums.RecordStatus.Active;
+            entity.CreatedDateTime = DateTime.UtcNow;
+            entity.UpdatedDateTime = DateTime.UtcNow;
+            entity.RecordStatus = RecordStatus.Active;
             mongoCollection.InsertOne(entity);
+
             return entity;
         }
 
-        public virtual async Task<TEntity> AddAsync(TEntity entity, bool forceDates = false)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            if (!forceDates)
-            {
-                entity.CreatedDateTime = DateTime.UtcNow;
-                entity.UpdatedDateTime = DateTime.UtcNow;
-            }
-
-            entity.RecordStatus = Core.Enums.Enums.RecordStatus.Active;
+            entity.CreatedDateTime = DateTime.UtcNow;
+            entity.UpdatedDateTime = DateTime.UtcNow;
+            entity.RecordStatus = RecordStatus.Active;
             await mongoCollection.InsertOneAsync(entity);
+
             return entity;
         }
 
-        public virtual List<TEntity> Add(List<TEntity> entities, bool forceDates = false)
+        public virtual List<TEntity> Add(List<TEntity> entities)
         {
-            if (!forceDates)
+            entities.ForEach(x =>
             {
-                entities.ForEach(x =>
-                {
-                    x.CreatedDateTime = DateTime.UtcNow;
-                    x.UpdatedDateTime = DateTime.UtcNow;
-                    x.RecordStatus = Core.Enums.Enums.RecordStatus.Active;
-                });
-            }
+                x.CreatedDateTime = DateTime.UtcNow;
+                x.UpdatedDateTime = DateTime.UtcNow;
+                x.RecordStatus = RecordStatus.Active;
+            });
 
             mongoCollection.InsertMany(entities);
             return entities;
@@ -143,7 +133,7 @@ namespace Challenge.Common.Services
             {
                 x.CreatedDateTime = DateTime.UtcNow;
                 x.UpdatedDateTime = DateTime.UtcNow;
-                x.RecordStatus = Core.Enums.Enums.RecordStatus.Active;
+                x.RecordStatus = RecordStatus.Active;
             });
             await mongoCollection.InsertManyAsync(entities);
             return entities;
@@ -155,11 +145,9 @@ namespace Challenge.Common.Services
             mongoCollection.ReplaceOne(m => m.Id == entity.Id, entity);
         }
 
-        public virtual async Task UpdateAsync(TEntity entity, bool forceDates = false)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
-            if (!forceDates)
-                entity.UpdatedDateTime = DateTime.UtcNow;
-
+            entity.UpdatedDateTime = DateTime.UtcNow;
             await mongoCollection.ReplaceOneAsync(m => m.Id == entity.Id, entity);
         }
 
@@ -177,14 +165,14 @@ namespace Challenge.Common.Services
 
         public virtual void Delete(TEntity entity)
         {
-            entity.RecordStatus = Core.Enums.Enums.RecordStatus.Deleted;
+            entity.RecordStatus = RecordStatus.Deleted;
             entity.UpdatedDateTime = DateTime.UtcNow;
             this.Update(entity.Id, entity);
         }
 
         public virtual async Task DeleteAsync(TEntity entity)
         {
-            entity.RecordStatus = Core.Enums.Enums.RecordStatus.Deleted;
+            entity.RecordStatus = RecordStatus.Deleted;
             entity.UpdatedDateTime = DateTime.UtcNow;
             await this.UpdateAsync(entity.Id, entity);
         }
@@ -197,8 +185,7 @@ namespace Challenge.Common.Services
 
         public virtual async Task DeleteAsync(string id)
         {
-            var entity = await this.GetByIdAsync(id);
-            await this.DeleteAsync(entity);
+            await mongoCollection.UpdateOneAsync(Builders<TEntity>.Filter.Eq(x => x.Id, id), Builders<TEntity>.Update.Set(x => x.RecordStatus, RecordStatus.Deleted));
         }
 
         public virtual DeleteResult HardDelete(string id)

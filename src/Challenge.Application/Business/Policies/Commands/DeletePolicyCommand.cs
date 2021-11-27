@@ -21,10 +21,9 @@ namespace Challenge.Application.Business.Policies.Commands
             _service = service;
         }
 
-        public Task Handle(DeletePolicyCommand command)
+        public async Task Handle(DeletePolicyCommand command)
         {
-            _service.Delete(command.Policy);
-            return Task.CompletedTask;
+            await _service.DeleteAsync(command.Policy);
         }
     }
 }

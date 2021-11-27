@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Challenge.Common.Events;
 
 namespace Challenge.Common.Services
 {
-    public class CrudService<T> : ICrudService<T>
-        where T : AggregateRoot<string>
+    public class CrudService<T> : ICrudService<T> where T : AggregateRoot<string>
     {
         protected readonly IRepository<T> _repository;
         private readonly IDomainEvents _domainEvents;
@@ -17,22 +17,17 @@ namespace Challenge.Common.Services
             _domainEvents = domainEvents;
         }
 
-        public virtual void AddOrUpdate(T entity)
+        public virtual async Task AddOrUpdateAsync(T entity)
         {
             var adding = string.IsNullOrWhiteSpace(entity.Id);
-            
             if (adding)
             {
-                entity.CreatedDateTime = DateTime.UtcNow;
-                _repository.Add(entity);
-                
+                await _repository.AddAsync(entity);
                 _domainEvents.Dispatch(new EntityCreatedEvent<T>(entity, DateTime.UtcNow));
             }
             else
             {
-                entity.UpdatedDateTime = DateTime.UtcNow;
-                _repository.Update(entity);
-
+                await _repository.UpdateAsync(entity);
                 _domainEvents.Dispatch(new EntityUpdatedEvent<T>(entity, DateTime.UtcNow));
             }
         }
@@ -44,14 +39,25 @@ namespace Challenge.Common.Services
 
         public virtual T GetById(string Id)
         {
-            //ValidationException.Requires(Id != Guid.Empty, "Invalid Id");
-            return _repository.GetAll().FirstOrDefault(x => x.Id == Id);
+            return _repository.FirstOrDefaultBy(x => x.Id == Id);
         }
 
-        public virtual void Delete(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
-            _repository.Delete(entity);
+            await _repository.DeleteAsync(entity.Id);
             _domainEvents.Dispatch(new EntityDeletedEvent<T>(entity, DateTime.UtcNow));
+        }
+
+        public async Task DeleteAsync(string id, bool triggerEvent = false)
+        {
+            if (triggerEvent)
+            {
+                var entity = await _repository.GetByIdAsync(id);
+                await _repository.DeleteAsync(entity.Id);
+                _domainEvents.Dispatch(new EntityDeletedEvent<T>(entity, DateTime.UtcNow));
+            }
+            else
+                await _repository.DeleteAsync(id);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Challenge.Application.Business.Users.Commands
                 command.User.Image = "";
             }
             
-            _service.AddOrUpdate(command.User);
+            await _service.AddOrUpdateAsync(command.User);
             await _redisService.AddAsync($"user-{command.User.Id}", command.User, CacheTimes.CACHE_120_DK);
         }
     }

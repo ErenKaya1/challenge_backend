@@ -22,12 +22,10 @@ namespace Challenge.Application.Business.Policies.Commands
             _service = service;
         }
 
-        public Task Handle(AddUpdatePolicyCommand command)
+        public async Task Handle(AddUpdatePolicyCommand command)
         {
             command.Policy.Slug = command.Policy.Title.ToUrlSlug();
-            _service.AddOrUpdate(command.Policy);
-            
-            return Task.CompletedTask;
+            await _service.AddOrUpdateAsync(command.Policy);
         }
     }
 }

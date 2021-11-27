@@ -49,6 +49,7 @@
                         <div class="card-body">
                             <form asp-controller="BackofficeUser" asp-action="AddOrUpdate" asp-antiforgery="true" method="post">
                                 <input asp-for="Id" type="hidden">
+                                <input asp-for="CreatedDateTime" type="hidden">
                                 <div class="row">
                                     <div class="form-group col-lg-6">
                                         <label asp-for="FirstName">Ad</label>
@@ -80,7 +81,7 @@
                                         <span asp-validation-for="Role" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-12">
                                         <button type="submit" class="btn btn-backoffice-primary float-right">Kaydet <i class="icon-paperplane ml-2"></i></button>
                                     </div>

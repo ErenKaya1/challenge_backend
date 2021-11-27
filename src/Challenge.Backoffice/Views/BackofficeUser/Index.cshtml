@@ -101,6 +101,7 @@
                                     <th>E-Posta</th>
                                     <th>Telefon</th>
                                     <th>Rol</th>
+                                    <th class="text-center" style="width: 200px;">Kayıt Tarihi</th>
                                     <th class="text-center" style="width: 100px;"></th>
                                 </tr>
                             </thead>
@@ -108,7 +109,7 @@
                                 @if (!Model.Result.Items.Any())
                                 {
                                     <tr>
-                                        <td colspan="6" class="text-center">Kayıt Bulunamadı.</td>
+                                        <td colspan="7" class="text-center">Kayıt Bulunamadı.</td>
                                     </tr>
                                 }
                                 else
@@ -116,17 +117,18 @@
                                     foreach (var item in Model.Result.Items)
                                     {
                                         <tr>
-                                            <td></td>
+                                            <td>@(Model.Query.Skip + Model.Result.Items.IndexOf(item) + 1)</td>
                                             <td>@(item.FirstName + " " + item.LastName)</td>
                                             <td>@item.Email</td>
                                             <td>@item.PhoneNumber</td>
                                             <td>@item.Role.GetDisplayValue()</td>
+                                            <td class="text-center">@item.CreatedDateTime?.ToLocalTime().ToString("dd.MM.yyyy HH.mm")</td>
                                             <td class="text-center">
                                                 <div class="btn-group justify-content-center">
                                                     <a href="#" class="btn btn-sm " data-toggle="dropdown"><i class="icon-menu9"></i></a>
                                                     <div class="dropdown-menu">
                                                         <a href="@Url.Action("AddOrUpdate", "BackofficeUser", new { Id = item.Id, returnUrl = returnUrl })" class="dropdown-item"><i class="icon-search4 mr-2"></i>Görüntüle / Düzenle</a>
-                                                        <a href="javascript:;" onclick="Delete(this);" data-id="@item.Id" class="dropdown-item text-danger"><i class="icon-eraser2 mr-2"></i>Sil</a>
+                                                        <a href="javascript:void(0)" onclick="Delete(this);" data-id="@item.Id" class="dropdown-item text-danger"><i class="icon-eraser2 mr-2"></i>Sil</a>
                                                     </div>
                                                 </div>
                                             </td>

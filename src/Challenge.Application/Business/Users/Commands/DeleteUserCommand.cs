@@ -21,10 +21,9 @@ namespace Challenge.Application.Business.Users.Commands
             _service = service;
         }
 
-        public Task Handle(DeleteUserCommand command)
+        public async Task Handle(DeleteUserCommand command)
         {
-            _service.Delete(command.User);
-            return Task.CompletedTask;
+            await _service.DeleteAsync(command.User);
         }
     }
 }

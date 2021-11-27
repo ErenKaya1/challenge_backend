@@ -92,6 +92,7 @@
                                     <th style="width: 100px;">#</th>
                                     <th>Başlık</th>
                                     <th>Sözleşme Tipi</th>
+                                    <th class="text-center" style="width: 200px;">Oluşturma Tarihi</th>
                                     <th class="text-center" style="width: 100px;"></th>
                                 </tr>
                             </thead>
@@ -99,7 +100,7 @@
                                 @if (!Model.Result.Items.Any())
                                 {
                                     <tr>
-                                        <td colspan="6" class="text-center">Kayıt Bulunamadı.</td>
+                                        <td colspan="5" class="text-center">Kayıt Bulunamadı.</td>
                                     </tr>
                                 }
                                 else
@@ -107,9 +108,10 @@
                                     foreach (var item in Model.Result.Items)
                                     {
                                         <tr>
-                                            <td></td>
+                                            <td>@(Model.Query.Skip + Model.Result.Items.IndexOf(item) + 1)</td>
                                             <td>@(item.Title)</td>
                                             <td>@item.PolicyType.GetDisplayValue()</td>
+                                            <td class="text-center">@item.CreatedDateTime?.ToLocalTime().ToString("dd.MM.yyyy HH.mm")</td>
                                             <td class="text-center">
                                                 <div class="btn-group justify-content-center">
                                                     <a href="#" class="btn btn-sm " data-toggle="dropdown"><i class="icon-menu9"></i></a>
@@ -200,6 +202,8 @@
 </div>
 
 @section Scripts{
+    
+
     <script>
         function Delete(e) {
             var Id = $(e).data('id');
