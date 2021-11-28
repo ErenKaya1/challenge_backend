@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Challenge.API
 {
@@ -69,6 +70,7 @@ namespace Challenge.API
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSerilogRequestLogging();
 
             app.UseEndpoints(endpoints =>
             {
